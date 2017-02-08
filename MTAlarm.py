@@ -2,7 +2,7 @@ from gpiozero import Button, PWMLED, MotionSensor, Buzzer
 from time import sleep
 
 # Setup all the GPIO pins and their devices
-led = PWMLED(18) 
+led = PWMLED(18)
 buzzer = Buzzer(15)
 pir = MotionSensor(14)
 button1 = Button(3)
@@ -34,7 +34,7 @@ setPIN = ['1','2','3','4'] # Default unlock code for the alarm
 
 # Read 4 button presses. DEL button act as as 'backspace':
 #  but if you get the last number wrong you can't undo!
-def get_4_digits(): 
+def get_4_digits():
     entered=[] # list to store entered numbers
     button_del.when_pressed = lambda : entered.pop() if len(entered) > 0 else False
     for b in buttons: # set a function for every button in buttons list
@@ -47,7 +47,7 @@ def get_4_digits():
     buzzer.beep(on_time=0.2, off_time=0.2,n=1)
     return(entered)
 
-# Givesa 10 second window to eneter the correct code 
+# Givesa 10 second window to eneter the correct code
 # LED flashes faster and faster as countdown goes on
 def countdown():
     counter = 10 # start at 10
@@ -59,17 +59,17 @@ def countdown():
         led.blink(on_time=0.4,off_time=0.4,n=1)
     # whne time is up, start beeping!
     if not disabled:
-        buzzer.beep(on_time=0.5,off_time=0.5, n=1)
+        buzzer.beep(on_time=0.5,off_time=0.5)
         led.on()
 
 print('ready')
 disabled = False
 led.pulse(fade_in_time=1, fade_out_time=1) # LED glows to show alarm is active
 pir.when_motion = countdown # start countdown when motion detected
-pir.wait_for_motion() 
+pir.wait_for_motion()
 print('alarm')
 PIN = get_4_digits() # wait for buttons presees
 if PIN == setPIN: # if the code was correct....
     print('pin ok')
     led.off()
-    disabled = True  # ... disable the alarm 
+    disabled = True  # ... disable the alarm
